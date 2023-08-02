@@ -34,5 +34,4 @@ main = do
   when (length args /= 1) $ error "Usage: check-random-polys deg"
 
   let polys = randomPolynomials (read $ head args) gen
-  _ <- Control.Monad.foldM_ report initialReport polys
-  return ()
+  foldM_ report initialReport polys
