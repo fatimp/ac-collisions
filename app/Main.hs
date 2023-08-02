@@ -5,6 +5,7 @@ import System.Random
 import System.Environment
 import Factor.Zx
 import Control.Monad
+import System.IO
 
 data Report = Report {processed :: Int, found :: Int} deriving Show
 
@@ -21,10 +22,9 @@ report :: Report -> Zx -> IO Report
 report rep polynomial = do
   let (newrep, reporting) = analizePolynomial rep polynomial
   when reporting $ do
-    putStrLn "Collision found:"
-    forM_ (collisions polynomial) print
-    putStrLn ""
-  when (rem (processed newrep) 100 == 0) $ print newrep
+    hPutStrLn stdout "Collision found:"
+    forM_ (collisions polynomial) $ hPrint stdout
+  when (rem (processed newrep) 100 == 0) $ hPrint stderr newrep
   pure newrep
 
 main :: IO ()
